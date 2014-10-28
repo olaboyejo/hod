@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block login %}
+
+{% if username and logged_in %}
+<li><a href="/logout">Logout</a></li>
+{% else %}
+<li><a href="/login">Login</a></li>
+{% endif %}
+
+{% endblock %}
+
+
+{% block page_content %}
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>House of diagnostics</h1>
+        <p class="lead">Your one-stop shop for Medical Laboratory Testing.<br> Book your next test online <a href="/appointment">now</a>.</p>
+      </div>
+
+    </div><!-- /.container -->
+{% endblock %}

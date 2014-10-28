@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block login %}
+
+<li><a href="/logout">Logout</a></li>
+
+
+{% endblock %}
+
+
+
+{% block page_content %}
+      <br>
+      <h1>Welcome {{ username|capitalize }}! </h1>
+      <h3>Next Appointment is:</h3>
+        <strong>Date:</strong> {{ dates }} <br>
+
+{% endblock %}

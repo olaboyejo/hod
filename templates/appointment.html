@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block login %}
+
+{% if username and logged_in %}
+<li><a href="/logout">Logout</a></li>
+{% else %}
+<li><a href="/login">Login</a></li>
+{% endif %}
+
+{% endblock %}
+<br> </br>
+
+{% block page_content %}
+
+<br> </br>
+{% from "_formhelpers.html" import render_field %}
+<form method=post action="/appointment">
+  <dl>
+    {{ render_field(form.test_id) }}
+    {{ render_field(form.moment, placeholder=current_time) }}
+    {{ render_field(form.email, default=email) }}
+{% endif %}
+  </dl>
+  <p><input type=submit value=Book>
+</form>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+      <h1>Welcome to Flask!</h2>
+      <br>
+      <p>Click <a href="/">here</a> to go home.</p>
+      <br>
+      {% for messages in get_flashed_messages() %}
+      {{ message }}
+      {% endfor %}
+{% endblock %}
