@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from hod import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash

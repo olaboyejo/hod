@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from functools import wraps
 from flask.ext.bootstrap import Bootstrap
 from flask import Flask, render_template, redirect, url_for, request, session, flash, g

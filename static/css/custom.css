@@ -1,0 +1,23 @@
+html, body {
+  /* min-height: 100px; */
+  padding-top: 20px;
+  height: 100%;
+}
+
+#wrap {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+#footer {
+  display: table-footer-group;
+  height: 1px;
+}  
+
+label {
+  margin-left: 0px;
+}

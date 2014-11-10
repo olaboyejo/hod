@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from datetime import datetime
 from hod import db
 from models import MakeAppointment, User, Test, Role
@@ -17,7 +18,7 @@ db.session.add(Test('Pregnancy'))
 db.session.add(Test('Blood Type'))
 db.session.add(Test('HIV'))
 db.session.add(Test('DNA'))
-db.session.add(User('ama', 'ama@gmail.com', 'you-will-never-walk-alone', 1))
+db.session.add(User('amachefe', 'amachefe@outlook.com', 'you-will-never-walk-alone', 1))
 db.session.add(User('amaka', 'amaka@gmail.com', 'you-will-never-walk-alone', 2))
 db.session.add(User('chido', 'bashiru@gmail.com', 'you-will-never-walk-alone', 2))
 db.session.add(User('bash', 'chidi@gmail.com', 'you-will-never-walk-alone', 2))
