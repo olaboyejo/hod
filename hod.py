@@ -35,6 +35,15 @@ def login_required(f):
             return redirect(url_for('login'))
     return wrap
 
+def adminlogin_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'admin' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('You need to be an administrator to see this page')
+            return redirect(url_for('adminlogin'))
+    return wrap
    
 class LoginForm(WTForm):
     username = StringField('Username', validators=[Required()])
@@ -75,6 +84,11 @@ def home(username):
     else:
       return redirect(url_for('login'))
 
+@app.route('/userlist')
+@adminlogin_required
+def adminhome():
+      users = get_users_db()
+      return render_template('userlist.html', users=users)
 
 @app.route('/appointment', methods=['GET', 'POST'])
 def appointment():
@@ -143,6 +157,25 @@ def login():
             error = ' Invalid Credentials '
     return render_template('login.html', error=error, form=form, username=session.get('username'))
 
+@app.route('/adminlogin', methods=['GET', 'POST'])
+def adminlogin():
+    error = None
+    username = None
+    form = LoginForm(request.form)
+    if form.validate() and request.method == 'POST':
+        username = form.username.data
+        password = form.password.data
+        user_check = User.query.filter_by(username=username).first()
+        if user_check is not None and check_password_hash(user_check.password, password) and user_check.role_id ==1:
+            session['logged_in'] = True
+            session['admin'] = True
+            session['username'] = username
+            flash('You just logged in successfully')
+            return redirect(url_for('adminhome'))
+        else:
+            error = ' Invalid Credentials '
+    return render_template('adminlogin.html', error=error, form=form, username=session.get('username'))
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -159,6 +192,10 @@ def connect_db(username):
     else:
         dates = MakeAppointment.query.filter_by(user_id = id).first().moment
     return dates
+
+def get_users_db():
+    users = User.query.filter_by(role_id = 3).all()
+    return users
 
 if __name__ == '__main__':
     manager.run()
