@@ -1,26 +1,25 @@
 {% extends "layout.html" %}
 
-{% block login %}
-
-{% if username and logged_in %}
-<li><a href="/logout">Logout</a></li>
-{% else %}
-<li><a href="/login">Login</a></li>
-{% endif %}
-
-{% endblock %}
-<br> </br>
-
 {% block page_content %}
-
-<br> </br>
+<div class="container">
+    <div class="page-header">
+      <h2>Appointment</h2>
+    </div>
 {% from "_formhelpers.html" import render_field %}
-<form method=post action="/appointment">
+<form class="col-md-4" method=post action="/appointment">
   <dl>
     {{ render_field(form.test_id) }}
     {{ render_field(form.moment, placeholder=current_time) }}
-    {{ render_field(form.email, default=email) }}
+    <br>
+    <div class="input-group">
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-envelope"></span>
+        </span>
+        <input name="email" type="email" class="form-control" required placeholder="email address">
+    </div>
+    <br>
   </dl>
-  <p><input type=submit value=Book>
+  <p><button type="submit" class="btn btn-primary">Book</button>
 </form>
+</div>
 {% endblock %}
