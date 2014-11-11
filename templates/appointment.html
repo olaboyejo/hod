@@ -8,8 +8,8 @@
 {% from "_formhelpers.html" import render_field %}
 <form class="col-md-4" method=post action="/appointment">
   <dl>
-    {{ render_field(form.test_id) }}
-    {{ render_field(form.moment, placeholder=current_time) }}
+    {{ render_field(form.test_id, class="form-control") }}
+    {{ render_field(form.moment, class="form-control", placeholder=current_time) }}
     <br>
     <div class="input-group">
         <span class="input-group-addon">
