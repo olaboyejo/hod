@@ -7,13 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="amachefe">
     <link rel="icon" href="static/img/favicon.ico">
-    <title>{% block title %}{% endblock %}</title>
-    {% block styles %}
+    <title>{% block title %} Welcome {% endblock %}</title>
     <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/static/css/custom.css" rel="stylesheet">
-    {% endblock %}  
+    {% block styles %}{% endblock %}  
  </head>
  <body>
  <!-- Wrap all page content here -->
@@ -33,7 +32,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            {% if session.logged_in %}
+            {% if 'admin' or 'logged_in' in session %}
             <li class="dropdown">
               <a href="/" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-home"></i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small></a>            
              <ul class="dropdown-menu" role="menu">
@@ -55,7 +54,7 @@
             {% else %}
 	        <li class="dropdown">
 	          <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
-	            <i class="glyphicon glyphicon-user"></i> {{ username }} <span class="caret"></span></a>
+	            <i class="glyphicon glyphicon-user"></i> {{ session.username }} <span class="caret"></span></a>
 	          <ul id="g-account-menu" class="dropdown-menu" role="menu">
 	            <li><a href="/user/{{username}}"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
 	            <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
@@ -89,13 +88,13 @@
       </div>
     </footer>
     
-    {% block scripts %}
+    
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="/static/js/jquery.min.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
-    {% endblock %}
+        {% block morescripts %}{% endblock %}
 </div> <!-- ./wrap --> 
 </body>
 </html>

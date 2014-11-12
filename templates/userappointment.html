@@ -10,8 +10,8 @@
       <dl>
         {{ render_field(form.test_id, class="form-control") }}
         {{ render_field(form.moment,class="form-control", placeholder=current_time) }}
-        <h2>Hi {{ username|capitalize }}! Confirm the appointment above by clicking book below</h2>
-          <h5>Not {{ username|capitalize }}, <li><a href="/logout">Logout</a></li> </h5>
+        <h4>Hi {{ username|capitalize }}! Confirm the appointment above by clicking book below</h4>
+        <p>Not {{ username|capitalize }}?, <a href="/logout">Logout</a></p>
       </dl>
       <p><button type="submit" class="btn btn-primary">Book</button>
     </form>

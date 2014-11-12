@@ -64,7 +64,7 @@ class AppointmentForm(WTForm):
 
 class RegistrationForm(WTForm):
     username = TextField('Username', [validators.Length(min=4, max=25)])
-    email = TextField('Email Address', [validators.Length(min=6, max=120), validators.Email()])
+    email = TextField('Email Address', [validators.Email()])
     password = PasswordField('New Password', [
         validators.Required(),
         validators.EqualTo('confirm', message='Passwords must match')
@@ -130,6 +130,7 @@ def appointment():
         return render_template('appointment.html', form=form, current_time=current_time)
 
 @app.route('/register', methods=['GET', 'POST'])
+@adminlogin_required
 def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -182,6 +183,7 @@ def adminlogin():
 @login_required
 def logout():
     session.pop('logged_in', None)
+    session.pop('admin', None)
     session.pop('username', None)
     flash('you just logged out. Why the hell would you do that?')
     return redirect(url_for('index'))

@@ -1,9 +1,105 @@
 {% extends "layout.html" %}
 {% block title %} User List{% endblock %}
 {% block page_content %}
-      <br>
-      {% for user in users %}
-      <h3>{{ user }}</h3>
-      {% endfor %}
+<div class="container">
+    <div class="page-header">
+      <h2>User Lists</h2>
+    </div>
+    <div class="row btn-toolbar">
+        <div class="col-lg-4">
+            <a href="/register" class="btn btn-primary" role="button">New User</a>
+            <a href="/import" class="btn btn-default" role="button">Import</a>
+            <a href="/export" class="btn btn-default" role="button">Export</a>
+        </div>
+        <div class="col-lg-4 col-lg-offset-4">
+          <div class="input-group custom-search-form">
+              <input type="text" id="search" value="" class="form-control" placeholder="Search..">
+              <span class="input-group-btn">
+                  <a class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </a>
+              </span>
+          </div><!-- /input-group -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">		
+            <table class="table" id="table">  
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>First Name</th>
+                  <th>User Name</th>
+                  <th>Username</th>
+                  <th>Account type</th>
+                  <th style="width: 36px;">Action</th>
+                </tr>
+              </thead>
+              {% for user in users %}             
+              <tbody>
+                <tr>
+                  <td>{{user.id}}</td>
+                  <td>{{ user }}</td>
+                  <td>{{ user.username }}</td>
+                  <td>{{user.email}}</td>
+                  <td>{{user.role}}</td>
+                  <td>
+                      <a href="editprofile.html"><i class="glyphicon glyphicon-pencil"></i></a>
+                      <a href="#delModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-remove"></i></a>
+                  </td>
+                </tr>
+		      </tbody>                
+              {% endfor %}
+            </table>
+		</div>
+        <div class="pagination">
+            <ul class="pagination center-block" style="display:inline-block;">
+                <li><a href="#">Prev</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">Next</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
+	<!--delModal -->
+	<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
+	      </div>
+	      <div class="modal-body">
+	       
+	      <div class="alert alert-warning">
+	         <span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?
+	       </div>
+	       
+	      </div>
+	      <div class="modal-footer ">
+	        <button type="button" class="btn btn-warning" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+	        <button type="button" class="btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span> No</button>
+	      </div>
+	    </div>
+	    <!-- /.modal-content --> 
+	  </div>
+	      <!-- /.modal-dialog --> 
+	</div>
+	
+ {% block morescripts %}
+  <script src="static/js/jquery.searchable-ie.min.js"></script>
+  <script>
+  /* Fuzzy Searching */
+  $(function () {
+    $( '#table' ).searchable({
+        striped: true,
+        oddRow: { 'background-color': '#f5f5f5' },
+        evenRow: { 'background-color': '#fff' },
+        searchType: 'fuzzy'
+    });
+  });
+  </script>
+ {% endblock %} <!--./script-->
+ 
 {% endblock %}
