@@ -1,3 +1,3 @@
-==EHR Portal==
+## EHR Portal
 
 Electronic Health Record Portal

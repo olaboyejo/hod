@@ -1,19 +1,17 @@
 {% extends "layout.html" %}
-
-{% block login %}
-
-<li><a href="/login">Login</a></li>
-
-
-{% endblock %}
-
+{% block title %} Admin Login{% endblock %}
 {% block page_content %}
-{% from "_formhelpers.html" import render_field %}
-<form method=post action="/adminlogin">
-  <dl>
-    {{ render_field(form.username) }}
-    {{ render_field(form.password) }}
-  </dl>
-  <p><input type=submit value=Login>
-</form>
+<div class="container">
+    <div class="page-header">
+      <h2>Admin Control</h2>
+    </div>
+    {% from "_formhelpers.html" import render_field %}
+    <form class="col-md-4" method=post action="/adminlogin">
+      <dl>
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+      </dl>
+      <p><button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
 {% endblock %}

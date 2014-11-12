@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
-
+{% block title %} Appointment{% endblock %}
 {% block page_content %}
 <div class="container">
     <div class="page-header">
       <h2>Appointment</h2>
     </div>
-{% from "_formlhelpers.html" import render_field %}
+{% from "_formhelpers.html" import render_field %}
 <form class="col-md-4" method=post action="/appointment">
   <dl>
     {{ render_field(form.test_id, class="form-control") }}

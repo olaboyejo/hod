@@ -1,14 +1,5 @@
 {% extends "layout.html" %}
-
-{% block login %}
-
-<li><a href="/logout">Logout</a></li>
-
-
-{% endblock %}
-
-
-
+{% block title %} User List{% endblock %}
 {% block page_content %}
       <br>
       {% for user in users %}
