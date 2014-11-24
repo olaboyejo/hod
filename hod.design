@@ -1,0 +1,65 @@
+user
+- id
+- sname
+- fname
+- email
+- password
+- apointments
+- sex
+- address
+- date of birth
+
+admin
+- id
+- username
+- password
+- staff/admin
+
+
+test
+- id
+- test
+
+
+appointment
+- id
+- date/time
+- test_id
+- user_id
+- result
+
+
+public
+- home
+- appointment
+- login
+
+private
+
+user
+
+- profile
+  - test history
+  - email
+  - date of birth
+  - sex
+  - address
+  - names
+  - password
+
+admin
+
+staff
+ 
+- users
+- appointments
+
+admin
+
+- users
+- admins
+- tests
+- appointments
+
+
+
