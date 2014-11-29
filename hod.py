@@ -279,7 +279,7 @@ def connect_db(username):
     if date_check is None:
         dates = 'no appointment'
     else:
-        dates = MakeAppointment.query.filter_by(user_id = id).first().moment
+        dates = MakeAppointment.query.filter_by(user_id = id).first().appointment_date
     return dates
 
 def password_generator(length=13, chars=string.ascii_letters +string.digits + '!@#$%^&*()'):
