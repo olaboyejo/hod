@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %} Profile ({{username}}){% endblock %}
+{% block page_content %}
+<div class="container">
+    <br>
+    <h1>Welcome {{ username|capitalize }}! </h1>
+
+
+{% for date in dates %}
+ {{ date }} <br>
+{% endfor %}
+
+</div>
+{% endblock %}

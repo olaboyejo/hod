@@ -153,6 +153,16 @@ class RegistrationForm(WTForm):
 def index():
     return render_template('index.html', logged_in=session.get('logged_in'), username=session.get('username'))
 
+@app.route('/user/<username>/appointments')
+@login_required
+def get_appointments(username):
+    if username == session['username']:
+      dates = get_appointments_db(username)
+      
+      return render_template('get_appointments.html', username=username, dates=dates)
+    else:
+      return redirect(url_for('login'))
+
 @app.route('/user/<username>')
 @login_required
 def home(username):
@@ -272,6 +282,13 @@ def logout():
     logout_user()
     flash('you just logged out. Why the hell would you do that?')
     return redirect(url_for('index'))
+
+
+def get_appointments_db(username):
+    id = User.query.filter_by(email = username).first().id
+    dates = MakeAppointment.query.filter_by(user_id = id).all()
+    print dates
+    return dates
 
 def connect_db(username):
     id = User.query.filter_by(email = username).first().id
