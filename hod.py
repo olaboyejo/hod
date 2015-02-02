@@ -285,9 +285,15 @@ def logout():
 
 
 def get_appointments_db(username):
+    dates = []
     id = User.query.filter_by(email = username).first().id
-    dates = MakeAppointment.query.filter_by(user_id = id).all()
-    print dates
+    date_check = MakeAppointment.query.filter_by(user_id = id).all()
+    if date_check is None:
+        dates = []
+    else:
+        for date in date_check:
+            dates.append(date.appointment_date)
+            print dates
     return dates
 
 def connect_db(username):
