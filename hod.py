@@ -157,7 +157,7 @@ def index():
 @login_required
 def get_appointments(username):
     if username == session['username']:
-      dates = get_appointments_db(username)
+      dates = get_appointments(username)
       
       return render_template('get_appointments.html', username=username, dates=dates)
     else:
@@ -167,7 +167,7 @@ def get_appointments(username):
 @login_required
 def home(username):
     if username == session['username']:
-      dates = connect_db(username)
+      dates = get_next_date(username)
       
       return render_template('home.html', username=username, dates=dates)
     else:
@@ -286,24 +286,40 @@ def logout():
 
 def get_appointments_db(username):
     dates = []
+    tests = []
     id = User.query.filter_by(email = username).first().id
     date_check = MakeAppointment.query.filter_by(user_id = id).all()
     if date_check is None:
-        dates = []
+        dates = ["no appointments"]
+        tests = ["no tests"]
     else:
         for date in date_check:
             dates.append(date.appointment_date)
-            print dates
-    return dates
+            tests.append(date.test_id)
+            print dates, tests
+    return dates, tests
 
-def connect_db(username):
-    id = User.query.filter_by(email = username).first().id
-    date_check = MakeAppointment.query.filter_by(user_id = id).first()
-    if date_check is None:
-        dates = 'no appointment'
+def get_appointments(username):
+    date_test = {}
+    dates,tests = get_appointments_db(username)
+    no_appointments = ["no appointments"]
+    if dates == no_appointments:
+        date_test["no tests"] = "no appointments"
+        return dates, tests
     else:
-        dates = MakeAppointment.query.filter_by(user_id = id).first().appointment_date
-    return dates
+        for id in tests:
+          date_test[tests[id]]=dates[id]
+        return date_test
+
+def get_next_date(username):
+    dates,tests = get_appointments_db(username)
+    no_appointments = ["no appointments"]
+    if dates == no_appointments:
+        return dates
+    else:
+        dates.sort()
+        return dates[0]
+
 
 def password_generator(length=13, chars=string.ascii_letters +string.digits + '!@#$%^&*()'):
     return ''.join(random.choice(chars) for x in range(length))

@@ -4,11 +4,13 @@
 <div class="container">
     <br>
     <h1>Welcome {{ username|capitalize }}! </h1>
+<dl>
+      {% for key, value in dates.iteritems() %}
+            <dt>{{ key }}</dt>
+            <dd>{{ value }}</dd>
+      {% endfor %}
+</dl>
 
-
-{% for date in dates %}
- {{ date }} <br>
-{% endfor %}
 
 </div>
 {% endblock %}

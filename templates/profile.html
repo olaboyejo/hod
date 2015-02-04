@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col-sm-10">
-            <h1 class="">Boye Olowo</h1>
+            <h1 class="">{{ username|capitalize }}</h1>
             <button type="button" class="btn btn-success">Book me!</button>
             <button type="button" class="btn btn-info">Send me a message</button>
         </div>
@@ -22,22 +22,17 @@
         <div class="col-sm-3"><!--left col-->          
           <ul class="list-group">
             <li class="list-group-item text-muted">Profile</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> 2014.02.13</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Last seen</strong></span> Yesterday</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Real name</strong></span> Joseph Doe</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>First Names</strong></span> {{ firstname|capitalize }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Surname</strong></span> {{ surname|capitalize }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Date of Birth</strong></span> {{ dob }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Home Address</strong></span> {{ home }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Email Address</strong></span> {{ email }}</li>
             
           </ul> 
           <div class="panel panel-default">
             <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
             <div class="panel-body"><a href="http://bootnipets.com">bootnipets.com</a></div>
           </div>
-          <ul class="list-group">
-            <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Followers</strong></span> 78</li>
-          </ul> 
         </div><!--/col-3-->
         <div class="col-sm-9">
           <ul class="nav nav-tabs" id="myTab">
@@ -52,12 +47,8 @@
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Label 1</th>
-                      <th>Label 2</th>
-                      <th>Label 3</th>
-                      <th>Label </th>
-                      <th>Label </th>
-                      <th>Label </th>
+                      <th>Test</th>
+                      <th>Date</th>
                     </tr>
                   </thead>
                   <tbody id="items">
@@ -79,78 +70,6 @@
                       <td>Table cell</td>
                       <td>Table cell</td>
                     </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
-                    <tr>
-                      <td>7</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
-                     <tr>
-                      <td>8</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
-                    <tr>
-                      <td>9</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
-                    <tr>
-                      <td>10</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                      <td>Table cell</td>
-                    </tr>
                   </tbody>
                 </table>
                 <hr>
@@ -164,18 +83,6 @@
             </div><!--/tab-pane-->
             <div class="tab-pane" id="messages">
                <h2></h2>
-               <ul class="list-group">
-                  <li class="list-group-item text-muted">Inbox</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">Here is your a link to the latest summary report from the..</a> 2014.02.13</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">Hi Joe, There has been a request on your account since that was..</a> 2014.02.11</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">Nullam sapien massaortor. A lobortis vitae, condimentum justo...</a> 2014.02.11</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">Thllam sapien massaortor. A lobortis vitae, condimentum justo...</a> 2014.02.11</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">Wesm sapien massaortor. A lobortis vitae, condimentum justo...</a> 2014.02.11</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">For therepien massaortor. A lobortis vitae, condimentum justo...</a> 2014.02.11</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">Also we, havesapien massaortor. A lobortis vitae, condimentum justo...</a> 2014.02.11</li>
-                  <li class="list-group-item text-right"><a href="#" class="pull-left">Swedish chef is assaortor. A lobortis vitae, condimentum justo...</a> 2014.02.11</li>
-                  
-                </ul> 
              </div><!--/tab-pane-->
             <div class="tab-pane" id="settings">
                 <hr>
