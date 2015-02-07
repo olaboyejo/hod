@@ -1,14 +1,39 @@
 {% extends "layout.html" %}
-{% block title %} Profile ({{username}}){% endblock %}
+{% block title %} Profile ({{user_details[0]}}){% endblock %}
 {% block page_content %}
 <div class="container">
+<div class="col-sm-3"><!--left col-->          
+          <ul class="list-group">
+            <li class="list-group-item text-muted">Profile</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>First Name</strong></span> {{ user_details[1]|capitalize }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Surname</strong></span> {{ user_details[2]|capitalize }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Date of Birth</strong></span> {{ user_details[3] }}</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Email Address</strong></span> {{ user_details[0] }}</li>
+            
+          </ul> 
+        </div><!--/col-3-->
+
     <br>
-    <h1>Welcome {{ username|capitalize }}! </h1>
+    <h1>Welcome {{ user_details[0]|capitalize }}! </h1>
 <dl>
-      {% for key, value in dates.iteritems() %}
-            <dt>{{ key }}</dt>
-            <dd>{{ value }}</dd>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>DATE</th>
+                      <th>TEST</th>
+                    </tr>
+                  </thead>
+                  <tbody id="items">
+      {% for date_test in user_details[4] %}
+                    <tr>
+                      <td>{{ date_test[0] }}</td>
+                      <td>{{ date_test[1] }}</td>
+                    </tr>
       {% endfor %}
+                  </tbody>
+                </table>
+
+
 </dl>
 
 

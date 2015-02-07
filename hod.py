@@ -10,14 +10,14 @@ from flask.ext.wtf import Form
 from wtforms import TextField, StringField, SubmitField, DateTimeField, PasswordField, BooleanField, validators, SelectField
 from wtforms import Form as WTForm
 from wtforms.validators import Required
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.script import Manager
 from flask.ext.login import LoginManager, login_user, logout_user
 from flask.ext.mail import Mail, Message
 from datetime import datetime
 from threading import Thread
-
+from wtforms_components import DateRange
 
 
 app = Flask(__name__)
@@ -114,6 +114,7 @@ def adminlogin_required(f):
             return redirect(url_for('adminlogin'))
     return wrap
 
+
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -127,15 +128,32 @@ class LoginForm(WTForm):
 
 class UserAppointmentForm(WTForm):
     test_id = SelectField('Test', coerce=int)
-    moment = DateTimeField('Appointment Date/Time', format='%Y-%m-%d %H:%M')
+    moment = DateTimeField('Appointment Date/Time', format='%Y-%m-%d %H:%M', validators=[DateRange(min=datetime.now())])
     email = TextField('Email Address', [validators.Length(min=6, max=120), validators.Email(), validators.Required()])
     submit = SubmitField('Submit')
 
 class AppointmentForm(WTForm):
     test_id = SelectField('Test', coerce=int)
-    moment = DateTimeField('Appointment Date/Time', format='%Y-%m-%d %H:%M')
+    moment = DateTimeField('Appointment Date/Time', format='%Y-%m-%d %H:%M', validators=[DateRange(min=datetime.now())])
     email = TextField('Email Address', [validators.Length(min=6, max=120), validators.Email(), validators.Required()])
     submit = SubmitField('Submit')
+
+def update_user(form, user_details):
+  default_email = user_details[0]
+  default_firstname = user_details[1]
+  default_dob= user_details[3]
+  default_surname = user_details[2]
+  class UserUpdateForm(WTForm):
+    firstname = TextField('Given Names', [validators.Length(min=0, max=50)], default=default_firstname)
+    surname = TextField('Surname', [validators.Length(min=0, max=50)], default=default_surname)
+    email = TextField('Email Address', [validators.Email()], default=default_email)
+    password = PasswordField('New Password', [validators.Length(min=0, max=50),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat Password')
+    dob = DateTimeField('Date of Birth', format='%Y-%m-%d', default=default_dob)
+  update_form = UserUpdateForm(form)
+  return update_form
 
 class RegistrationForm(WTForm):
     firstname = TextField('Given Names', [validators.Length(min=4, max=50)])
@@ -153,15 +171,17 @@ class RegistrationForm(WTForm):
 def index():
     return render_template('index.html', logged_in=session.get('logged_in'), username=session.get('username'))
 
-@app.route('/user/<username>/appointments')
+
+@app.route('/user/<username>/profile')
 @login_required
-def get_appointments(username):
+def profile(username):
     if username == session['username']:
       dates = get_appointments(username)
-      
-      return render_template('get_appointments.html', username=username, dates=dates)
+      user_details = get_user_details(username)
+      return render_template('profile.html', user_details = user_details, username = username)
     else:
       return redirect(url_for('login'))
+
 
 @app.route('/user/<username>')
 @login_required
@@ -188,7 +208,7 @@ def appointment():
     result = ''
     email =''
     if session.get('username') and session.get('logged_in'):
-        form = UserAppointmentForm(request.form)
+        form = AppointmentForm(request.form)
         form.test_id.choices = [(g.id, g.test) for g in Test.query.order_by('id')]
         if request.method == 'POST' and form.validate():
             moment = form.moment.data
@@ -201,7 +221,7 @@ def appointment():
             flash('Thanks for making an appointment')
             appointment_mail(user, moment, test=Test.query.filter_by(id = test_id).first().test)
             return redirect(url_for('index'))
-        return render_template('userappointment.html', form=form, logged_in=session.get('logged_in'), username=session.get('username'), current_time=current_time)
+        return render_template('appointment.html', form=form, logged_in=session.get('logged_in'), username=session.get('username'), current_time=current_time)
     else:
         form = AppointmentForm(request.form)
         form.test_id.choices = [(g.id, g.test) for g in Test.query.order_by('id')]
@@ -218,8 +238,31 @@ def appointment():
             return redirect(url_for('index'))
         return render_template('appointment.html', form=form, current_time=current_time)
 
+
+@app.route('/user/<username>/edit', methods=['GET', 'POST'])
+@login_required
+def user_update(username):
+    user_details = get_user_details(username)
+    form = update_user(request.form, user_details)
+    if request.method == 'POST' and form.validate():
+        id = get_user_id(username)
+        print id
+        user = User.query.get(id)
+        user.given_name = form.firstname.data
+        user.surname = form.surname.data
+        user.dob = form.dob.data
+        user.email = form.email.data
+        if len(form.password.data) < 6:
+            flash("Password should at least 6 characters\nPassword Remains unchanged")
+            user.password = user.password
+        else :
+            user.password = generate_password_hash(form.password.data)
+        db.session.commit()
+        flash('Settings Updated')
+        return redirect(url_for('profile', username=username))
+    return render_template('update.html', form=form, user_details=user_details, methods=['GET','POST'])
+
 @app.route('/register', methods=['GET', 'POST'])
-@adminlogin_required
 def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -285,41 +328,46 @@ def logout():
 
 
 def get_appointments_db(username):
-    dates = []
-    tests = []
+    dates_tests = []
     id = User.query.filter_by(email = username).first().id
     date_check = MakeAppointment.query.filter_by(user_id = id).all()
+    dates_tests = user_appointments(date_check)
+    return dates_tests
+
+def user_appointments(date_check):
+    dates_tests = []
     if date_check is None:
-        dates = ["no appointments"]
-        tests = ["no tests"]
+        dates_tests = [("no dates", "no tests")]
     else:
-        for date in date_check:
-            dates.append(date.appointment_date)
-            tests.append(date.test_id)
-            print dates, tests
-    return dates, tests
+        for appointment in date_check:
+            date = appointment.appointment_date
+            test_id = appointment.test_id
+            test = Test.query.filter_by(id=test_id).first()
+            date_test = (date, test)
+            dates_tests.append(date_test)
+    return dates_tests
+
+
+def get_user_details(username):
+    user  = User.query.filter_by(email=username).first()
+    given_name = user.given_name
+    surname = user.surname
+    dob = user.dob
+    appointments = user_appointments(user.appointments)
+    user_details = [user, given_name, surname, dob, appointments]
+    print user_details[4][0]
+    print user_details[4][1]
+    return user_details
 
 def get_appointments(username):
-    date_test = {}
-    dates,tests = get_appointments_db(username)
-    no_appointments = ["no appointments"]
-    if dates == no_appointments:
-        date_test["no tests"] = "no appointments"
-        return dates, tests
-    else:
-        for id in tests:
-          date_test[tests[id]]=dates[id]
-        return date_test
+    dates_tests = get_appointments_db(username)
+    appointments = sorted(dates_tests)
+    return appointments
 
 def get_next_date(username):
-    dates,tests = get_appointments_db(username)
-    no_appointments = ["no appointments"]
-    if dates == no_appointments:
-        return dates
-    else:
-        dates.sort()
-        return dates[0]
-
+    dates_tests = get_appointments_db(username)
+    next_appointment = sorted(dates_tests)[0]
+    return next_appointment
 
 def password_generator(length=13, chars=string.ascii_letters +string.digits + '!@#$%^&*()'):
     return ''.join(random.choice(chars) for x in range(length))

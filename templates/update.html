@@ -1,18 +1,21 @@
 {% extends "layout.html" %}
-{% block title %} Register {% endblock %}
+{% block title %} Profile Update {% endblock %}
 {% block page_content %}
 <div class="container">
     <div class="page-header">
-      <h2>Register User</h2>
+      <h2>Update Profile</h2>
     </div>
     {% from "_formhelpers.html" import render_field %}
-    <form class="col-md-4" method=post action="/register">
+    <form class="col-md-4" method=post action='/user/{{ user_details[0] }}/edit'>
       <dl>
         {{ render_field(form.email, class="form-control") }}
+        {{ render_field(form.firstname, class="form-control") }}
+        {{ render_field(form.surname, class="form-control") }}
+        {{ render_field(form.dob, class="form-control") }}
         {{ render_field(form.password, class="form-control") }}
         {{ render_field(form.confirm, class="form-control") }}
       </dl>
-      <p><button type="submit" class="btn btn-primary">Register</button>
+      <p><button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>
 {% endblock %}
